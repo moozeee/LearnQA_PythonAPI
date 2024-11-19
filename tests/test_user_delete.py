@@ -29,6 +29,8 @@ class TestUserDelete(BaseCase):
             self.token = self.get_header(response1, "x-csrf-token")
             self.user_id_from_auth_method = self.get_json_value(response1, "user_id")
 
+    @allure.title("Test delete default user")
+    @allure.description("Тест для проверки невозможности удаления дефолтного пользователя")
     def test_user_delete_id2(self):
         #Login
         self.login_user()
@@ -44,6 +46,9 @@ class TestUserDelete(BaseCase):
                                             cookies={"auth_sid": self.auth_sid})
         Assertions.assert_status_code(delete_response, "400")
 
+    @allure.title("Test delete new user")
+    @allure.description("Тест для проверки удаления новоого пользователя")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_user_delete_just_created_user(self):
         #Create user
         data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123', first_name='learnqa',
@@ -72,6 +77,9 @@ class TestUserDelete(BaseCase):
         response3 = MyRequests.get(f"/user/{user_id}")
         Assertions.assert_status_code(response3, "404")
 
+    @allure.title("Test delete user by user")
+    @allure.description("Тест для проверки удаления пользователя под другим пользователем")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_user_delete_user_by_other_user(self):
         # Create user to delete
         data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123',

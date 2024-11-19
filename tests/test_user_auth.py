@@ -25,6 +25,9 @@ class TestUserAuth(BaseCase):
         self.token = self.get_header(response1, "x-csrf-token")
         self.user_id_from_auth_method = self.get_json_value(response1, "user_id")
 
+    @allure.title("Test Succesfull Authentication")
+    @allure.testcase("Test2")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_user_auth(self):
         response2 = MyRequests.get('/user/auth',
                                    headers={"x-csrf-token": self.token},
@@ -33,6 +36,8 @@ class TestUserAuth(BaseCase):
         Assertions.assert_json_value_by_name(response2, "user_id", self.user_id_from_auth_method,
                                              "UserId из метода авторизации не равен UserId из метода проверки")
 
+    @allure.title("Test Authentication w/o cookies and token")
+    @allure.testcase("Test1")
     @allure.description("Этот тест проверяет статус авторизации без отправки куки или токена")
     @pytest.mark.parametrize('condition', exclude_params)
     def test_negative_auth_check(self, condition):

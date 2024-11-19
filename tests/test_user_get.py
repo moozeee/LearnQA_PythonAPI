@@ -1,5 +1,7 @@
 from datetime import datetime
 
+import allure
+
 from lib.my_requests import MyRequests
 import pytest
 from lib.base_case import BaseCase
@@ -8,6 +10,9 @@ from lib.assertions import Assertions
 
 class TestUserGet(BaseCase):
 
+    @allure.title("Test get user no login")
+    @allure.description("Тест для проверки получения данных пользователя без авторизации")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_get_user_details_not_auth(self):
         response = MyRequests.get("/user/2")
         Assertions.assert_json_has_key(response, "username")
@@ -21,6 +26,9 @@ class TestUserGet(BaseCase):
         random_part = datetime.now().strftime("%Y%m%d%H%M%S")
         self.email = f"{base_part}{random_part}@{domain}"
 
+    @allure.title("Test get user")
+    @allure.description("Тест для проверки получения данных пользователя c авторизацией")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_get_user_details_auth_as_same_user(self):
         data = {
             "email": 'vinkotov@example.com',
@@ -39,6 +47,9 @@ class TestUserGet(BaseCase):
         expected_fields = ["username", "email", "firstName", "lastName"]
         Assertions.assert_json_has_keys(response2, expected_fields)
 
+    @allure.title("Test get user by other user")
+    @allure.description("Тест для проверки получения данных пользователя c авторизацией под другим пользователем")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_get_user_details_auth_as_different_user(self):
         data = {
             "email": 'vinkotov@example.com',

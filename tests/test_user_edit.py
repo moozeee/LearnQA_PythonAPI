@@ -7,6 +7,9 @@ from lib.assertions import Assertions
 
 
 class TestUserEdit(BaseCase):
+    @allure.title("Test edit new user")
+    @allure.description("Тест для проверки изменения нового пользователя")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_edit_just_created_user(self):
         #Register
         register_data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123',
@@ -56,6 +59,9 @@ class TestUserEdit(BaseCase):
             new_name,
             "Неверное имя после изменения имени")
 
+    @allure.title("Test edit a user w/o login")
+    @allure.description("Тест для проверки изменения нового пользователя")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_edit_user_wo_login(self):
         # Edit
         new_name = "Changed Name"
@@ -66,6 +72,9 @@ class TestUserEdit(BaseCase):
         )
         Assertions.assert_status_code(response1, 400)
 
+    @allure.title("Test edit a user by user")
+    @allure.description("Тест для проверки изменения нового пользователя под другим пользователем")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_edit_just_created_user_by_other_user(self):
         #Register new user 1
         register_data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123',
@@ -99,6 +108,9 @@ class TestUserEdit(BaseCase):
 
         Assertions.assert_status_code(response3, 400)
 
+    @allure.title("Test edit a users email to wrong one")
+    @allure.description("Тест для проверки изменения емейла нового пользователя на невалидный")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_edit_email_of_just_created_user_to_wrong(self):
         #Register
         register_data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123',
@@ -135,6 +147,9 @@ class TestUserEdit(BaseCase):
 
         Assertions.assert_status_code(response3, 400)
 
+    @allure.title("Test edit a users name to wrong one")
+    @allure.description("Тест для проверки изменения имени пользователя на короткое недопустимое")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_edit_firstname_of_just_created_user_to_wrong(self):
         #Register
         register_data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123',

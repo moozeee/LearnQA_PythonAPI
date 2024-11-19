@@ -20,6 +20,9 @@ class TestUserRegister(BaseCase):
     ]
     email = 'vinkotov@example.com'
 
+    @allure.title("Test user register")
+    @allure.description("Тест для проверки получения успешной регистрации пользователя")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_create_user_successfully(self):
         data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123', first_name='learnqa',
                                               last_name='learnqa')
@@ -29,6 +32,9 @@ class TestUserRegister(BaseCase):
         Assertions.assert_status_code(response, 200)
         Assertions.assert_json_has_key(response, "id")
 
+    @allure.title("Test existing user register")
+    @allure.description("Тест для проверки невозможности регистрации существующего пользователя")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_create_user_with_existing_email(self):
         data = self.prepare_registration_data(email=self.email, username='learnqa', password='123', first_name='learnqa',
                                               last_name='learnqa')
@@ -39,6 +45,8 @@ class TestUserRegister(BaseCase):
         assert response.content.decode(
             "utf-8") == f"Users with email 'vinkotov@example.com' already exists", f"Текст ответа некорректный. Текущий ответ {response.content}"
 
+    @allure.title("Test user register without @ in email")
+    @allure.severity(allure.severity_level.CRITICAL)
     @allure.description("Этот тест проверяет невозможность регистрации пользователя без @ d емейле")
     def test_negative_register_wo_at_check(self):
         email = 'emailwithoutatsymbol.com'
@@ -47,6 +55,8 @@ class TestUserRegister(BaseCase):
         response = MyRequests.post("/user", data=data)
         Assertions.assert_status_code(response, 400)
 
+    @allure.title("Test user register negative cases")
+    @allure.severity(allure.severity_level.CRITICAL)
     @allure.description("Этот тест проверяет невозможность регистрации пользователя без каждого из параметров")
     @pytest.mark.parametrize('condition', exclude_params)
     def test_negative_register_without_params_check(self, condition):
