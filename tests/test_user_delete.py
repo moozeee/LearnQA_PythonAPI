@@ -72,3 +72,29 @@ class TestUserDelete(BaseCase):
         response3 = MyRequests.get(f"/user/{user_id}")
         Assertions.assert_status_code(response3, "404")
 
+    def test_user_delete_user_by_other_user(self):
+        # Create user to delete
+        data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123',
+                                              first_name='learnqa',
+                                              last_name='learnqa')
+
+        response = MyRequests.post("/user", data=data)
+        user_id = self.get_json_value(response, "id")
+        email = data['email']
+        password = data['password']
+        Assertions.assert_status_code(response, 200)
+
+        # Login as default user
+        self.login_user()
+        response2 = MyRequests.get('/user/auth',
+                                   headers={"x-csrf-token": self.token},
+                                   cookies={"auth_sid": self.auth_sid})
+        Assertions.assert_json_value_by_name(response2, "user_id", 2,
+                                             "UserId из метода авторизации не равен UserId из метода проверки")
+
+        # Delete try
+        delete_response = MyRequests.delete(f'/user/{user_id}',
+                                            headers={"x-csrf-token": self.token},
+                                            cookies={"auth_sid": self.auth_sid})
+        Assertions.assert_status_code(delete_response, "400")
+
