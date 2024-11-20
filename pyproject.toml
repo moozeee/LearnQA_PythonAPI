@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.12"
 requests = "^2.32.3"
 data = "^0.4"
+self = "^2020.12.3"
 
 
 [build-system]

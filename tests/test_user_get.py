@@ -3,12 +3,18 @@ from datetime import datetime
 import allure
 
 from lib.my_requests import MyRequests
-import pytest
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 
 
 class TestUserGet(BaseCase):
+    expected_fields = ["email", "firstName", "lastName"]
+
+    def setup_method(self):
+        base_part = "learnqa"
+        domain = "example.com"
+        random_part = datetime.now().strftime("%Y%m%d%H%M%S")
+        self.email = f"{base_part}{random_part}@{domain}"
 
     @allure.title("Test get user no login")
     @allure.description("Тест для проверки получения данных пользователя без авторизации")
@@ -16,15 +22,7 @@ class TestUserGet(BaseCase):
     def test_get_user_details_not_auth(self):
         response = MyRequests.get("/user/2")
         Assertions.assert_json_has_key(response, "username")
-        Assertions.assert_json_has_not_key(response, "email")
-        Assertions.assert_json_has_not_key(response, "firstName")
-        Assertions.assert_json_has_not_key(response, "lastName")
-
-    def setup_method(self):
-        base_part = "learnqa"
-        domain = "example.com"
-        random_part = datetime.now().strftime("%Y%m%d%H%M%S")
-        self.email = f"{base_part}{random_part}@{domain}"
+        Assertions.assert_json_has_not_keys(response, self.expected_fields)
 
     @allure.title("Test get user")
     @allure.description("Тест для проверки получения данных пользователя c авторизацией")
@@ -65,6 +63,5 @@ class TestUserGet(BaseCase):
         response2 = MyRequests.get(f"/user/{other_user_id}",
                                    headers={"x-csrf-token": token}, cookies={"auth_sid": auth_sid}
                                    )
-        expected_fields = ["email", "firstName", "lastName"]
         Assertions.assert_json_has_key(response2, "username")
-        Assertions.assert_json_has_not_keys(response2, expected_fields)
+        Assertions.assert_json_has_not_keys(response2, self.expected_fields)
