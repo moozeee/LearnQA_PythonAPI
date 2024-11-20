@@ -52,7 +52,6 @@ class TestUserEdit(BaseCase):
             headers={"x-csrf-token": token},
             cookies={"auth_sid": auth_sid},
         )
-        print(response4.content)
         Assertions.assert_json_value_by_name(
             response4,
             "firstName",
