@@ -65,7 +65,6 @@ class TestUserRegister(BaseCase):
             data = self.prepare_registration_data(username='learnqa', password='123', first_name='learnqa',
                                                   last_name='learnqa')
             response = MyRequests.post("/user", data=data)
-            Assertions.assert_status_code(response, 400)
         elif condition == "no_username":
             data = self.prepare_registration_data(rand_email=True, password='123', first_name='learnqa',
                                                   last_name='learnqa')
@@ -74,25 +73,22 @@ class TestUserRegister(BaseCase):
             data = self.prepare_registration_data(rand_email=True, username='learnqa', first_name='learnqa',
                                                   last_name='learnqa')
             response = MyRequests.post("/user", data=data)
-            Assertions.assert_status_code(response, 400)
         elif condition == "no_firstname":
             data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123',
                                                   last_name='learnqa')
             response = MyRequests.post("/user", data=data)
-            Assertions.assert_status_code(response, 400)
         elif condition == "no_lastname":
             data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123',
                                                   first_name='learnqa')
             response = MyRequests.post("/user", data=data)
-            Assertions.assert_status_code(response, 400)
         elif condition == "too_short_name":
             data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123',
                                                   first_name='l', last_name='learnqa')
             response = MyRequests.post("/user", data=data)
-            Assertions.assert_status_code(response, 400)
         elif condition == "too_long_name":
             data = self.prepare_registration_data(rand_email=True, username='learnqa', password='123',
                                                   first_name='Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ',
                                                   last_name='learnqa')
             response = MyRequests.post("/user", data=data)
-            Assertions.assert_status_code(response, 400)
+
+        Assertions.assert_status_code(response, 400)
